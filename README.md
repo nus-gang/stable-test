@@ -107,3 +107,7 @@ See [`docs/09_Mac_Docker_Development_Setup_v1.md`](docs/09_Mac_Docker_Developmen
 ### Ignite buf tool pin
 
 The chain dev image pins Ignite's internal `go tool github.com/bufbuild/buf/cmd/buf` execution to `buf v1.56.0` to avoid latest `buf` requiring an unreleased Go toolchain during scaffold.
+
+### Ignite scaffold helper Go version
+
+The Docker image keeps the project baseline at Go `1.23.2`, but installs scaffold-only Go `1.25.12` because Ignite's temporary scaffold dependency resolution can require Go `1.25.10+`.
