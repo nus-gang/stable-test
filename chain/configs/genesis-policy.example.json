@@ -1,0 +1,28 @@
+{
+  "chain_id": "stablecoin-private-1",
+  "address_prefix": "stbc",
+  "initial_stablecoin": {
+    "denom": "uusdx",
+    "display_name": "USDX",
+    "fiat_currency": "USD",
+    "decimals": 6,
+    "initial_supply": "0",
+    "max_supply": "1000000000000000",
+    "paused": false,
+    "fee_enabled": true,
+    "swap_enabled": false
+  },
+  "compliance": {
+    "mode": "BLACKLIST_ONLY",
+    "kyc_required": false,
+    "aml_required": false,
+    "whitelist_required": false,
+    "blacklisted_addresses": [],
+    "frozen_addresses": []
+  },
+  "feehandler": {
+    "allowed_fee_denoms": ["uusdx"],
+    "fee_collector": "<treasury_address>",
+    "min_gas_prices": [{"denom": "uusdx", "amount": "0.000001"}]
+  }
+}

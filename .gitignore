@@ -1,0 +1,50 @@
+# Agent Zero project/private runtime
+.a0proj/
+
+# Secrets / env
+.env
+.env.*
+*.env
+!.env.example
+**/secrets.*
+**/*secret*
+**/*token*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs
+*.log
+logs/
+
+# Go
+bin/
+build/
+dist/
+*.test
+coverage.out
+
+# Node
+node_modules/
+.next/
+out/
+coverage/
+.npm/
+.pnpm-store/
+.yarn/
+
+# Python/tooling
+venv/
+__pycache__/
+.pytest_cache/
+
+# Local chain data
+.chain-data/
+.localnet/
+**/data/
+**/keyring-test/
+**/priv_validator_key.json
+**/node_key.json
