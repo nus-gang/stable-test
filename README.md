@@ -108,3 +108,7 @@ See [`docs/09_Mac_Docker_Development_Setup_v1.md`](docs/09_Mac_Docker_Developmen
 ### Go 1.25.12 baseline
 
 The chain development Docker image uses `golang:1.25.12-bookworm` as the single project development/build baseline. Previous scaffold-only Go helper and Go wrapper logic has been removed.
+
+### Ignite relative path scaffold note
+
+If `chain/scripts/scaffold-chain.sh` fails with `Rel: can't make stablecoin relative to /workspace`, pull the latest `main`, remove `.tmp/stablecoin`, and rerun the script. The scaffold workflow uses a repo-relative `--path .tmp/stablecoin` to avoid this Ignite v29.10.x path issue.

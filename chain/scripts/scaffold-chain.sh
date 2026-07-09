@@ -8,9 +8,9 @@ CHAIN_BINARY="${CHAIN_BINARY:-stablecoind}"
 CHAIN_ID="${CHAIN_ID:-stablecoin-private-1}"
 ADDRESS_PREFIX="${ADDRESS_PREFIX:-stbc}"
 COSMOS_SDK_VERSION="${COSMOS_SDK_VERSION:-v0.53.7}"
-BUF_VERSION="${BUF_VERSION:-v1.56.0}"
 TMP_PARENT="${TMP_PARENT:-$REPO_ROOT/.tmp}"
 SCAFFOLD_DIR="$TMP_PARENT/${CHAIN_NAME}"
+SCAFFOLD_REL_PATH="${SCAFFOLD_REL_PATH:-.tmp/${CHAIN_NAME}}"
 
 usage() {
   cat <<USAGE
@@ -24,10 +24,10 @@ Defaults:
   CHAIN_ID=$CHAIN_ID
   ADDRESS_PREFIX=$ADDRESS_PREFIX
   COSMOS_SDK_VERSION=$COSMOS_SDK_VERSION
-BUF_VERSION=$BUF_VERSION
+  SCAFFOLD_REL_PATH=$SCAFFOLD_REL_PATH
 
 Environment overrides:
-  CHAIN_NAME, CHAIN_BINARY, CHAIN_ID, ADDRESS_PREFIX, COSMOS_SDK_VERSION, BUF_VERSION
+  CHAIN_NAME, CHAIN_BINARY, CHAIN_ID, ADDRESS_PREFIX, COSMOS_SDK_VERSION, SCAFFOLD_REL_PATH
 
 Options:
   --force    Allow overwriting an existing scaffold in chain/.
@@ -75,14 +75,18 @@ echo "Ignite version:"
 ignite version || true
 echo "Creating Cosmos SDK scaffold in temporary directory: $SCAFFOLD_DIR"
 
-cd "$TMP_PARENT"
+cd "$REPO_ROOT"
 
-# Ignite v29.10.x does not expose a stable --sdk-version flag for scaffold chain.
+# Ignite v29.10.x can fail when it scaffolds from inside the temporary parent
+# directory and then tries to calculate a relative path. Run from the repo root
+# and pass an explicit repo-relative --path instead.
 # Generate with the installed Ignite defaults first, then normalize go.mod to the
 # MVP baseline below after merging into chain/.
 ignite scaffold chain "$CHAIN_NAME" \
+  --path "$SCAFFOLD_REL_PATH" \
   --address-prefix "$ADDRESS_PREFIX" \
-  --default-denom "uusdx"
+  --default-denom "uusdx" \
+  --skip-git
 
 if [ ! -d "$SCAFFOLD_DIR" ]; then
   echo "Expected scaffold directory not found: $SCAFFOLD_DIR" >&2
@@ -103,7 +107,6 @@ if [ -f go.mod ]; then
   echo "Ensuring Cosmos SDK baseline in go.mod: $COSMOS_SDK_VERSION"
   if grep -q 'cosmossdk.io' go.mod || grep -q 'github.com/cosmos/cosmos-sdk' go.mod; then
     go get "github.com/cosmos/cosmos-sdk@${COSMOS_SDK_VERSION}" || true
-    go get "github.com/bufbuild/buf@${BUF_VERSION}" || true
     go mod edit -go=1.25.12 || true
     go mod edit -toolchain=none 2>/dev/null || true
     GOTOOLCHAIN=auto go mod tidy || true
@@ -117,7 +120,6 @@ CHAIN_ID=$CHAIN_ID
 ADDRESS_PREFIX=$ADDRESS_PREFIX
 DEFAULT_DENOM=uusdx
 COSMOS_SDK_VERSION=$COSMOS_SDK_VERSION
-BUF_VERSION=$BUF_VERSION
 ENVEOF
 
 cat <<DONE

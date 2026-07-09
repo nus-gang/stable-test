@@ -257,3 +257,19 @@ chain/scripts/build.sh
 ```bash
 docker compose -f infra/docker/docker-compose.chain.yml build --no-cache chain-dev
 ```
+
+## Troubleshooting: Ignite relative path scaffold error
+
+If scaffold fails with:
+
+```text
+Find relative path /workspace : Rel: can't make stablecoin relative to /workspace
+```
+
+Update to the latest `main` branch and rerun the scaffold script. The script now runs Ignite from the repository root and passes an explicit repo-relative `--path .tmp/stablecoin`, avoiding Ignite v29.10.x relative path resolution issues.
+
+```bash
+git pull origin main
+rm -rf .tmp/stablecoin
+chain/scripts/scaffold-chain.sh
+```
