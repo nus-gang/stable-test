@@ -60,14 +60,16 @@ RUN set -eux; \
       '  exec /go/bin/go${IGNITE_SCAFFOLD_GO_VERSION:-1.24.1} run github.com/bufbuild/buf/cmd/buf@v${IGNITE_BUF_VERSION:-1.56.0} "$@"' \
       'fi' \
       'exec /usr/local/go/bin/go-real "$@"' \
-      > /usr/local/bin/go; \
-    chmod 0755 /usr/local/bin/go; \
+      > /usr/local/go/bin/go; \
+    chmod 0755 /usr/local/go/bin/go; \
+    ln -sf /usr/local/go/bin/go /usr/local/bin/go; \
+    which go; \
     go version; \
     go1.24.1 version
 
 ENV CGO_ENABLED=1
 ENV GOPATH=/go
-ENV PATH="/go/bin:${PATH}"
+ENV PATH="/usr/local/bin:/go/bin:${PATH}"
 ENV CHAIN_ID=stablecoin-private-1
 ENV CHAIN_HOME=/workspace/.chain-data
 ENV CHAIN_BINARY=stablecoind
