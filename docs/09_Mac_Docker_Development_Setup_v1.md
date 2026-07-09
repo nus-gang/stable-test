@@ -273,3 +273,8 @@ git pull origin main
 rm -rf .tmp/stablecoin
 chain/scripts/scaffold-chain.sh
 ```
+
+
+### Ignite OpenAPI generation memory note
+
+If scaffold fails while generating an OpenAPI spec with `signal: killed`, update to the latest `main`, remove `.tmp/stablecoin`, and rerun `chain/scripts/scaffold-chain.sh`. The scaffold workflow uses Ignite `--skip-proto` to avoid heavy proto/OpenAPI generation during initial scaffold. Proto generation can be re-enabled later after the chain app structure is stable and Docker memory limits are tuned.

@@ -112,3 +112,8 @@ The chain development Docker image uses `golang:1.25.12-bookworm` as the single 
 ### Ignite relative path scaffold note
 
 If `chain/scripts/scaffold-chain.sh` fails with `Rel: can't make stablecoin relative to /workspace`, pull the latest `main`, remove `.tmp/stablecoin`, and rerun the script. The scaffold workflow uses a repo-relative `--path .tmp/stablecoin` to avoid this Ignite v29.10.x path issue.
+
+
+### Ignite OpenAPI generation memory note
+
+If scaffold fails while generating an OpenAPI spec with `signal: killed`, update to the latest `main`, remove `.tmp/stablecoin`, and rerun `chain/scripts/scaffold-chain.sh`. The scaffold workflow uses Ignite `--skip-proto` to avoid heavy proto/OpenAPI generation during initial scaffold. Proto generation can be re-enabled later after the chain app structure is stable and Docker memory limits are tuned.

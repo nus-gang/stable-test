@@ -86,7 +86,8 @@ ignite scaffold chain "$CHAIN_NAME" \
   --path "$SCAFFOLD_REL_PATH" \
   --address-prefix "$ADDRESS_PREFIX" \
   --default-denom "uusdx" \
-  --skip-git
+  --skip-git \
+  --skip-proto
 
 if [ ! -d "$SCAFFOLD_DIR" ]; then
   echo "Expected scaffold directory not found: $SCAFFOLD_DIR" >&2
