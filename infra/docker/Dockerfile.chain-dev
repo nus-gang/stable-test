@@ -52,15 +52,15 @@ RUN set -eux; \
 # pin buf to the version used by Ignite v29.10.1 itself.
 RUN set -eux; \
     mv /usr/local/go/bin/go /usr/local/go/bin/go-real; \
-    cat > /usr/local/bin/go <<'EOF'
-#!/usr/bin/env bash
-set -euo pipefail
-if [ "${1:-}" = "tool" ] && [ "${2:-}" = "github.com/bufbuild/buf/cmd/buf" ]; then
-  shift 2
-  exec /go/bin/go${IGNITE_SCAFFOLD_GO_VERSION:-1.24.1} run github.com/bufbuild/buf/cmd/buf@v${IGNITE_BUF_VERSION:-1.56.0} "$@"
-fi
-exec /usr/local/go/bin/go-real "$@"
-EOF
+    printf '%s\n' \
+      '#!/usr/bin/env bash' \
+      'set -euo pipefail' \
+      'if [ "${1:-}" = "tool" ] && [ "${2:-}" = "github.com/bufbuild/buf/cmd/buf" ]; then' \
+      '  shift 2' \
+      '  exec /go/bin/go${IGNITE_SCAFFOLD_GO_VERSION:-1.24.1} run github.com/bufbuild/buf/cmd/buf@v${IGNITE_BUF_VERSION:-1.56.0} "$@"' \
+      'fi' \
+      'exec /usr/local/go/bin/go-real "$@"' \
+      > /usr/local/bin/go; \
     chmod 0755 /usr/local/bin/go; \
     go version; \
     go1.24.1 version
