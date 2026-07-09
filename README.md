@@ -31,6 +31,17 @@ MVP 목표는 다음 end-to-end 흐름을 구현하는 것입니다.
 6. Scan에서 block/tx/address/token 조회
 7. Admin에서 blacklist/freeze, mint/burn, fee 설정 관리
 
+## Tech Stack Baseline
+
+| Component | Version |
+|---|---|
+| Cosmos SDK | `v0.53.7` |
+| Go | `1.23.2` |
+| CometBFT | `v0.38.21` |
+| Node.js | `22.x LTS` |
+| PostgreSQL | `16.x` |
+| Redis | `7.x` optional |
+
 ## Initial Genesis Policy
 
 | Item | Value |

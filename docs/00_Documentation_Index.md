@@ -11,6 +11,7 @@
 | 05 | [`05_MVP_Development_Roadmap_v1.md`](05_MVP_Development_Roadmap_v1.md) | Development roadmap |
 | 06 | [`06_MVP_Scope_v1.md`](06_MVP_Scope_v1.md) | MVP scope and completion criteria |
 | 07 | [`07_Genesis_Policy_v1.md`](07_Genesis_Policy_v1.md) | Genesis policy and initial chain settings |
+| 08 | [`08_Tech_Stack_Versions_v1.md`](08_Tech_Stack_Versions_v1.md) | Cosmos SDK, Go, CometBFT, Node.js version baseline |
 
 ## Backlog
 
@@ -27,3 +28,12 @@
 5. `05_MVP_Development_Roadmap_v1.md`
 6. `04_Wallet_Scan_Admin_Requirements_v1.md`
 7. `01_PRD_v1.md`
+
+## Version Baseline
+
+See [`08_Tech_Stack_Versions_v1.md`](08_Tech_Stack_Versions_v1.md) for the confirmed MVP technology stack:
+
+- Cosmos SDK `v0.53.7`
+- Go `1.23.2`
+- CometBFT `v0.38.21`
+- Node.js `22.x LTS`

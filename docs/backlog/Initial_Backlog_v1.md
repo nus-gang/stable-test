@@ -22,7 +22,7 @@
 | E0-002 | P0 | `.gitignore` 구성 | `.a0proj`, secrets, node_modules, chain local data 제외 |
 | E0-003 | P0 | README 작성 | 프로젝트 목적, 구조, MVP 요약 포함 |
 | E0-004 | P0 | Documentation index 작성 | 모든 설계 문서 링크 포함 |
-| E0-005 | P0 | Development stack lock 문서화 | Cosmos SDK, Go, Node, package manager 버전 결정 필요 |
+| E0-005 | P0 | Development stack lock 문서화 | Cosmos SDK v0.53.7, Go 1.23.2, Node.js 22.x LTS 확정. Package manager는 추후 확정 |
 | E0-006 | P1 | CI skeleton 추가 | lint/test placeholder workflow 추가 |
 
 ---
@@ -31,8 +31,8 @@
 
 | ID | Priority | Task | Acceptance Criteria |
 |---|---|---|---|
-| E1-001 | P0 | Cosmos SDK version 확정 | docs 또는 root config에 버전 기록 |
-| E1-002 | P0 | Go version 확정 | `go.mod` 및 docs에 버전 반영 |
+| E1-001 | P0 | Cosmos SDK version 확정 | v0.53.7로 확정, docs/08_Tech_Stack_Versions_v1.md 반영 |
+| E1-002 | P0 | Go version 확정 | Go 1.23.2로 확정, .tool-versions 및 docs 반영 |
 | E1-003 | P0 | Cosmos SDK app scaffold 생성 | `chain/`에서 daemon build 가능 |
 | E1-004 | P0 | Address prefix `stbc` 설정 | account/validator prefix 확인 가능 |
 | E1-005 | P0 | Chain ID `stablecoin-private-1` 설정 | local node status에서 확인 |
