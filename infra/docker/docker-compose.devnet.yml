@@ -1,0 +1,64 @@
+# 4-validator local devnet skeleton.
+# This compose file is intentionally scaffold-ready: actual validator startup
+# commands will be finalized after the Cosmos SDK chain binary is generated.
+
+x-chain-validator: &chain-validator
+  build:
+    context: ../..
+    dockerfile: infra/docker/Dockerfile.chain-dev
+  image: stable-test/chain-dev:go1.23.2
+  working_dir: /workspace
+  volumes:
+    - ../..:/workspace
+    - go_pkg_mod:/go/pkg/mod
+    - go_build_cache:/root/.cache/go-build
+  environment:
+    CHAIN_ID: stablecoin-private-1
+    CHAIN_BINARY: stablecoind
+  command: bash -lc "chain/scripts/start-devnet.sh"
+
+services:
+  validator-1:
+    <<: *chain-validator
+    container_name: stable-test-validator-1
+    environment:
+      CHAIN_ID: stablecoin-private-1
+      CHAIN_BINARY: stablecoind
+      VALIDATOR_NAME: validator-1
+      CHAIN_HOME: /workspace/.chain-data/devnet/validator-1
+    ports:
+      - "26657:26657"
+      - "26656:26656"
+      - "1317:1317"
+      - "9090:9090"
+
+  validator-2:
+    <<: *chain-validator
+    container_name: stable-test-validator-2
+    environment:
+      CHAIN_ID: stablecoin-private-1
+      CHAIN_BINARY: stablecoind
+      VALIDATOR_NAME: validator-2
+      CHAIN_HOME: /workspace/.chain-data/devnet/validator-2
+
+  validator-3:
+    <<: *chain-validator
+    container_name: stable-test-validator-3
+    environment:
+      CHAIN_ID: stablecoin-private-1
+      CHAIN_BINARY: stablecoind
+      VALIDATOR_NAME: validator-3
+      CHAIN_HOME: /workspace/.chain-data/devnet/validator-3
+
+  validator-4:
+    <<: *chain-validator
+    container_name: stable-test-validator-4
+    environment:
+      CHAIN_ID: stablecoin-private-1
+      CHAIN_BINARY: stablecoind
+      VALIDATOR_NAME: validator-4
+      CHAIN_HOME: /workspace/.chain-data/devnet/validator-4
+
+volumes:
+  go_pkg_mod:
+  go_build_cache:

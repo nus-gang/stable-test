@@ -68,3 +68,20 @@ Start with:
 ## Repository Status
 
 This repository currently contains project documentation and initial mono-repo skeleton. Actual implementation starts with the Phase 1 chain scaffold.
+
+## Mac Docker Development
+
+MacBook local development is Docker-based. Start with:
+
+```bash
+docker compose -f infra/docker/docker-compose.chain.yml build chain-dev
+docker compose -f infra/docker/docker-compose.chain.yml run --rm chain-dev
+```
+
+Development DB/Redis:
+
+```bash
+docker compose -f infra/docker/docker-compose.dev.yml up -d
+```
+
+See [`docs/09_Mac_Docker_Development_Setup_v1.md`](docs/09_Mac_Docker_Development_Setup_v1.md) for the full setup guide.

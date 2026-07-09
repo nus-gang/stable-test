@@ -1,0 +1,28 @@
+services:
+  chain-dev:
+    build:
+      context: ../..
+      dockerfile: infra/docker/Dockerfile.chain-dev
+    image: stable-test/chain-dev:go1.23.2
+    container_name: stable-test-chain-dev
+    working_dir: /workspace
+    volumes:
+      - ../..:/workspace
+      - go_pkg_mod:/go/pkg/mod
+      - go_build_cache:/root/.cache/go-build
+    environment:
+      CHAIN_ID: stablecoin-private-1
+      CHAIN_BINARY: stablecoind
+      CHAIN_HOME: /workspace/.chain-data/local
+    ports:
+      - "26656:26656"
+      - "26657:26657"
+      - "1317:1317"
+      - "9090:9090"
+    command: bash
+    stdin_open: true
+    tty: true
+
+volumes:
+  go_pkg_mod:
+  go_build_cache:

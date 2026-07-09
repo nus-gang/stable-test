@@ -12,6 +12,7 @@
 | 06 | [`06_MVP_Scope_v1.md`](06_MVP_Scope_v1.md) | MVP scope and completion criteria |
 | 07 | [`07_Genesis_Policy_v1.md`](07_Genesis_Policy_v1.md) | Genesis policy and initial chain settings |
 | 08 | [`08_Tech_Stack_Versions_v1.md`](08_Tech_Stack_Versions_v1.md) | Cosmos SDK, Go, CometBFT, Node.js version baseline |
+| 09 | [`09_Mac_Docker_Development_Setup_v1.md`](09_Mac_Docker_Development_Setup_v1.md) | MacBook Docker-based development setup |
 
 ## Backlog
 
