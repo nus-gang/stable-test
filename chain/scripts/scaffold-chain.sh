@@ -69,27 +69,18 @@ fi
 mkdir -p "$TMP_PARENT"
 rm -rf "$SCAFFOLD_DIR"
 
-echo "Ignite version: $(ignite version 2>/dev/null | head -n 1 || true)"
+echo "Ignite version:"
+ignite version || true
 echo "Creating Cosmos SDK scaffold in temporary directory: $SCAFFOLD_DIR"
 
 cd "$TMP_PARENT"
 
-# Ignite v29 supports Cosmos SDK v0.53. The version flag name has changed across
-# Ignite releases, so try the explicit SDK flag first and fall back to default
-# scaffold if the installed CLI does not expose it.
-if ignite scaffold chain "$CHAIN_NAME" \
-    --address-prefix "$ADDRESS_PREFIX" \
-    --default-denom "uusdx" \
-    --minimal \
-    --sdk-version "$COSMOS_SDK_VERSION"; then
-  :
-else
-  echo "Retrying without --sdk-version/--minimal for Ignite compatibility..." >&2
-  rm -rf "$SCAFFOLD_DIR"
-  ignite scaffold chain "$CHAIN_NAME" \
-    --address-prefix "$ADDRESS_PREFIX" \
-    --default-denom "uusdx"
-fi
+# Ignite v29.10.x does not expose a stable --sdk-version flag for scaffold chain.
+# Generate with the installed Ignite defaults first, then normalize go.mod to the
+# MVP baseline below after merging into chain/.
+ignite scaffold chain "$CHAIN_NAME" \
+  --address-prefix "$ADDRESS_PREFIX" \
+  --default-denom "uusdx"
 
 if [ ! -d "$SCAFFOLD_DIR" ]; then
   echo "Expected scaffold directory not found: $SCAFFOLD_DIR" >&2
@@ -109,9 +100,10 @@ cd "$CHAIN_DIR"
 if [ -f go.mod ]; then
   echo "Ensuring Cosmos SDK baseline in go.mod: $COSMOS_SDK_VERSION"
   if grep -q 'cosmossdk.io' go.mod || grep -q 'github.com/cosmos/cosmos-sdk' go.mod; then
-    go mod edit -go=1.23 || true
     go get "github.com/cosmos/cosmos-sdk@${COSMOS_SDK_VERSION}" || true
-    go mod tidy || true
+    go mod edit -go=1.23.2 || true
+    go mod edit -toolchain=none 2>/dev/null || true
+    GOTOOLCHAIN=auto go mod tidy || true
   fi
 fi
 

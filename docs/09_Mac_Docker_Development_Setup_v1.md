@@ -240,3 +240,21 @@ chain/scripts/scaffold-chain.sh
 ```bash
 chain/scripts/build.sh
 ```
+
+## Troubleshooting: Ignite Go 1.24.1 scaffold helper
+
+Ignite CLI `v29.10.1` may create a temporary scaffold whose initial `go.mod` asks for Go `1.24.1` during Ignite's internal `go mod tidy` step. The chain development image therefore installs a scaffold-only `go1.24.1` wrapper while keeping the primary project baseline as Go `1.23.2` and Cosmos SDK `v0.53.7`.
+
+If you previously built the image before this fix, rebuild without cache:
+
+```bash
+docker compose -f infra/docker/docker-compose.chain.yml build --no-cache chain-dev
+```
+
+Then remove the failed temporary scaffold directory and retry:
+
+```bash
+rm -rf .tmp/stablecoin
+docker compose -f infra/docker/docker-compose.chain.yml run --rm chain-dev
+chain/scripts/scaffold-chain.sh
+```

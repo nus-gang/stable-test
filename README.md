@@ -90,6 +90,9 @@ MacBook local development is Docker-based. Start with:
 
 ```bash
 docker compose -f infra/docker/docker-compose.chain.yml build chain-dev
+
+# If you are updating from an older image, rebuild without cache:
+docker compose -f infra/docker/docker-compose.chain.yml build --no-cache chain-dev
 docker compose -f infra/docker/docker-compose.chain.yml run --rm chain-dev
 ```
 

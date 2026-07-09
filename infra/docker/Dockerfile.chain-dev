@@ -3,6 +3,7 @@ FROM golang:1.23.2-bookworm
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG IGNITE_VERSION=29.10.1
+ARG IGNITE_SCAFFOLD_GO_VERSION=1.24.1
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -36,6 +37,14 @@ RUN set -eux; \
     rm -f /tmp/ignite.tar.gz /tmp/ignite; \
     ignite version
 
+# Ignite v29 can scaffold apps whose temporary generated go.mod asks for Go 1.24.1.
+# Keep the primary toolchain at Go 1.23.2 for the MVP baseline, but install the
+# go1.24.1 wrapper so Ignite's internal `go mod tidy` step can complete.
+RUN set -eux; \
+    go install golang.org/dl/go${IGNITE_SCAFFOLD_GO_VERSION}@latest; \
+    go${IGNITE_SCAFFOLD_GO_VERSION} download; \
+    go${IGNITE_SCAFFOLD_GO_VERSION} version
+
 ENV CGO_ENABLED=1
 ENV GOPATH=/go
 ENV PATH="/go/bin:${PATH}"
@@ -43,6 +52,7 @@ ENV CHAIN_ID=stablecoin-private-1
 ENV CHAIN_HOME=/workspace/.chain-data
 ENV CHAIN_BINARY=stablecoind
 ENV IGNITE_VERSION=${IGNITE_VERSION}
+ENV IGNITE_SCAFFOLD_GO_VERSION=${IGNITE_SCAFFOLD_GO_VERSION}
 
 WORKDIR /workspace
 
