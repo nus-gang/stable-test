@@ -258,3 +258,23 @@ rm -rf .tmp/stablecoin
 docker compose -f infra/docker/docker-compose.chain.yml run --rm chain-dev
 chain/scripts/scaffold-chain.sh
 ```
+
+## Troubleshooting: buf requires Go 1.25.x
+
+If scaffold fails with an error similar to the following:
+
+```text
+github.com/bufbuild/buf@v1.71.0 requires go >= 1.25.10
+```
+
+use the updated image from commit containing the `go tool` wrapper fix. Ignite runs buf as `go tool github.com/bufbuild/buf/cmd/buf`; the Docker image now intercepts that specific call and pins buf to `v1.56.0`, matching Ignite `v29.10.1`'s own dependency.
+
+Rebuild without cache and retry:
+
+```bash
+git pull origin main
+rm -rf .tmp/stablecoin
+docker compose -f infra/docker/docker-compose.chain.yml build --no-cache chain-dev
+docker compose -f infra/docker/docker-compose.chain.yml run --rm chain-dev
+chain/scripts/scaffold-chain.sh
+```

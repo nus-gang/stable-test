@@ -4,6 +4,7 @@ FROM golang:1.23.2-bookworm
 ARG DEBIAN_FRONTEND=noninteractive
 ARG IGNITE_VERSION=29.10.1
 ARG IGNITE_SCAFFOLD_GO_VERSION=1.24.1
+ARG IGNITE_BUF_VERSION=1.56.0
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -45,6 +46,25 @@ RUN set -eux; \
     go${IGNITE_SCAFFOLD_GO_VERSION} download; \
     go${IGNITE_SCAFFOLD_GO_VERSION} version
 
+# Ignite invokes buf through `go tool github.com/bufbuild/buf/cmd/buf`.
+# With Go tool directives and no explicit require, Go resolves the latest buf,
+# which can require an unreleased Go toolchain. Wrap only that go-tool call and
+# pin buf to the version used by Ignite v29.10.1 itself.
+RUN set -eux; \
+    mv /usr/local/go/bin/go /usr/local/go/bin/go-real; \
+    cat > /usr/local/bin/go <<'EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+if [ "${1:-}" = "tool" ] && [ "${2:-}" = "github.com/bufbuild/buf/cmd/buf" ]; then
+  shift 2
+  exec /go/bin/go${IGNITE_SCAFFOLD_GO_VERSION:-1.24.1} run github.com/bufbuild/buf/cmd/buf@v${IGNITE_BUF_VERSION:-1.56.0} "$@"
+fi
+exec /usr/local/go/bin/go-real "$@"
+EOF
+    chmod 0755 /usr/local/bin/go; \
+    go version; \
+    go1.24.1 version
+
 ENV CGO_ENABLED=1
 ENV GOPATH=/go
 ENV PATH="/go/bin:${PATH}"
@@ -53,6 +73,7 @@ ENV CHAIN_HOME=/workspace/.chain-data
 ENV CHAIN_BINARY=stablecoind
 ENV IGNITE_VERSION=${IGNITE_VERSION}
 ENV IGNITE_SCAFFOLD_GO_VERSION=${IGNITE_SCAFFOLD_GO_VERSION}
+ENV IGNITE_BUF_VERSION=${IGNITE_BUF_VERSION}
 
 WORKDIR /workspace
 

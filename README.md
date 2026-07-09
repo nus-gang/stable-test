@@ -103,3 +103,7 @@ docker compose -f infra/docker/docker-compose.dev.yml up -d
 ```
 
 See [`docs/09_Mac_Docker_Development_Setup_v1.md`](docs/09_Mac_Docker_Development_Setup_v1.md) for the full setup guide.
+
+### Ignite buf tool pin
+
+The chain dev image pins Ignite's internal `go tool github.com/bufbuild/buf/cmd/buf` execution to `buf v1.56.0` to avoid latest `buf` requiring an unreleased Go toolchain during scaffold.
