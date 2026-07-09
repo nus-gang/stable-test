@@ -11,6 +11,7 @@ COSMOS_SDK_VERSION="${COSMOS_SDK_VERSION:-v0.53.7}"
 TMP_PARENT="${TMP_PARENT:-$REPO_ROOT/.tmp}"
 SCAFFOLD_DIR="$TMP_PARENT/${CHAIN_NAME}"
 SCAFFOLD_REL_PATH="${SCAFFOLD_REL_PATH:-.tmp/${CHAIN_NAME}}"
+SKIP_PROTO="${SKIP_PROTO:-0}"
 
 usage() {
   cat <<USAGE
@@ -25,9 +26,10 @@ Defaults:
   ADDRESS_PREFIX=$ADDRESS_PREFIX
   COSMOS_SDK_VERSION=$COSMOS_SDK_VERSION
   SCAFFOLD_REL_PATH=$SCAFFOLD_REL_PATH
+  SKIP_PROTO=$SKIP_PROTO
 
 Environment overrides:
-  CHAIN_NAME, CHAIN_BINARY, CHAIN_ID, ADDRESS_PREFIX, COSMOS_SDK_VERSION, SCAFFOLD_REL_PATH
+  CHAIN_NAME, CHAIN_BINARY, CHAIN_ID, ADDRESS_PREFIX, COSMOS_SDK_VERSION, SCAFFOLD_REL_PATH, SKIP_PROTO
 
 Options:
   --force    Allow overwriting an existing scaffold in chain/.
@@ -82,12 +84,22 @@ cd "$REPO_ROOT"
 # and pass an explicit repo-relative --path instead.
 # Generate with the installed Ignite defaults first, then normalize go.mod to the
 # MVP baseline below after merging into chain/.
-ignite scaffold chain "$CHAIN_NAME" \
-  --path "$SCAFFOLD_REL_PATH" \
-  --address-prefix "$ADDRESS_PREFIX" \
-  --default-denom "uusdx" \
-  --skip-git \
-  --skip-proto
+IGNITE_ARGS=(
+  scaffold chain "$CHAIN_NAME"
+  --path "$SCAFFOLD_REL_PATH"
+  --address-prefix "$ADDRESS_PREFIX"
+  --default-denom "uusdx"
+  --skip-git
+)
+
+if [ "$SKIP_PROTO" = "1" ]; then
+  echo "SKIP_PROTO=1 set; skipping Ignite proto/OpenAPI generation."
+  IGNITE_ARGS+=(--skip-proto)
+else
+  echo "Proto/OpenAPI generation is enabled by default. Ensure Docker Desktop memory is high enough."
+fi
+
+ignite "${IGNITE_ARGS[@]}"
 
 if [ ! -d "$SCAFFOLD_DIR" ]; then
   echo "Expected scaffold directory not found: $SCAFFOLD_DIR" >&2
@@ -121,6 +133,7 @@ CHAIN_ID=$CHAIN_ID
 ADDRESS_PREFIX=$ADDRESS_PREFIX
 DEFAULT_DENOM=uusdx
 COSMOS_SDK_VERSION=$COSMOS_SDK_VERSION
+SKIP_PROTO=$SKIP_PROTO
 ENVEOF
 
 cat <<DONE

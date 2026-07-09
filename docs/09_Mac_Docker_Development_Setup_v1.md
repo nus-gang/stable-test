@@ -277,4 +277,22 @@ chain/scripts/scaffold-chain.sh
 
 ### Ignite OpenAPI generation memory note
 
-If scaffold fails while generating an OpenAPI spec with `signal: killed`, update to the latest `main`, remove `.tmp/stablecoin`, and rerun `chain/scripts/scaffold-chain.sh`. The scaffold workflow uses Ignite `--skip-proto` to avoid heavy proto/OpenAPI generation during initial scaffold. Proto generation can be re-enabled later after the chain app structure is stable and Docker memory limits are tuned.
+Proto/OpenAPI generation is enabled by default during scaffold. Before running it on Docker Desktop for Mac, allocate enough resources: 8GB memory minimum, 12~16GB recommended, and 4GB+ swap. If scaffold fails while generating an OpenAPI spec with `signal: killed`, either increase Docker Desktop memory and retry, or use the fallback mode:
+
+```bash
+SKIP_PROTO=1 chain/scripts/scaffold-chain.sh
+```
+
+
+## Docker Desktop resource recommendation for proto/OpenAPI generation
+
+Proto/OpenAPI generation is enabled by default. Configure Docker Desktop resources before running the scaffold:
+
+| Resource | Minimum | Recommended |
+|---|---:|---:|
+| Memory | 8GB | 12GB ~ 16GB |
+| CPU | 4 cores | 6 ~ 8 cores |
+| Swap | 4GB | 4GB ~ 8GB |
+| Disk image size | 64GB | 100GB+ |
+
+If OpenAPI generation is killed by the OS, retry after increasing Docker memory or run `SKIP_PROTO=1 chain/scripts/scaffold-chain.sh` as a fallback.

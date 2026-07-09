@@ -116,4 +116,8 @@ If `chain/scripts/scaffold-chain.sh` fails with `Rel: can't make stablecoin rela
 
 ### Ignite OpenAPI generation memory note
 
-If scaffold fails while generating an OpenAPI spec with `signal: killed`, update to the latest `main`, remove `.tmp/stablecoin`, and rerun `chain/scripts/scaffold-chain.sh`. The scaffold workflow uses Ignite `--skip-proto` to avoid heavy proto/OpenAPI generation during initial scaffold. Proto generation can be re-enabled later after the chain app structure is stable and Docker memory limits are tuned.
+Proto/OpenAPI generation is enabled by default during scaffold. Before running it on Docker Desktop for Mac, allocate enough resources: 8GB memory minimum, 12~16GB recommended, and 4GB+ swap. If scaffold fails while generating an OpenAPI spec with `signal: killed`, either increase Docker Desktop memory and retry, or use the fallback mode:
+
+```bash
+SKIP_PROTO=1 chain/scripts/scaffold-chain.sh
+```
