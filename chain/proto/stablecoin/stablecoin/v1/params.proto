@@ -1,0 +1,13 @@
+syntax = "proto3";
+package stablecoin.stablecoin.v1;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "stablecoin/x/stablecoin/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (amino.name) = "stablecoin/x/stablecoin/Params";
+  option (gogoproto.equal) = true;
+}
