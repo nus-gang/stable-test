@@ -104,7 +104,7 @@ if [ -f go.mod ]; then
   if grep -q 'cosmossdk.io' go.mod || grep -q 'github.com/cosmos/cosmos-sdk' go.mod; then
     go get "github.com/cosmos/cosmos-sdk@${COSMOS_SDK_VERSION}" || true
     go get "github.com/bufbuild/buf@${BUF_VERSION}" || true
-    go mod edit -go=1.23.2 || true
+    go mod edit -go=1.25.12 || true
     go mod edit -toolchain=none 2>/dev/null || true
     GOTOOLCHAIN=auto go mod tidy || true
   fi

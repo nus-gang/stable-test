@@ -7,7 +7,7 @@ Cosmos SDK private stablecoin chain component.
 | Component | Version |
 |---|---|
 | Cosmos SDK | `v0.53.7` |
-| Go | `1.23.2` |
+| Go | `1.25.12` |
 | CometBFT | `v0.38.21` |
 | Chain ID | `stablecoin-private-1` |
 | Address Prefix | `stbc` |

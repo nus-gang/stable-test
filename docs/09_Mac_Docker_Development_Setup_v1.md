@@ -18,7 +18,7 @@
 | Component | Version |
 |---|---|
 | Cosmos SDK | `v0.53.7` |
-| Go | `1.23.2` |
+| Go | `1.25.12` |
 | CometBFT | `v0.38.21` |
 | Node.js | `22.x LTS` |
 | PostgreSQL | `16.x` |
@@ -72,7 +72,7 @@ cd chain
 Expected Go baseline:
 
 ```text
-go1.23.2
+go1.25.12
 ```
 
 ---
@@ -168,7 +168,7 @@ Apple Silicon Macs should use native `linux/arm64` Docker images where possible.
 The current Dockerfiles use official multi-architecture images:
 
 ```text
-golang:1.23.2-bookworm
+golang:1.25.12-bookworm
 postgres:16-alpine
 redis:7-alpine
 ```
@@ -241,46 +241,19 @@ chain/scripts/scaffold-chain.sh
 chain/scripts/build.sh
 ```
 
-## Troubleshooting: Ignite Go 1.25.12 scaffold helper
+## Current Go 기준
 
-Ignite CLI `v29.10.1` may create a temporary scaffold whose initial `go.mod` asks for Go `1.25.12` during Ignite's internal `go mod tidy` step. The chain development image therefore installs a scaffold-only `go1.25.12` wrapper while keeping the primary project baseline as Go `1.23.2` and Cosmos SDK `v0.53.7`.
+현재 chain 개발 Docker image는 `golang:1.25.12-bookworm`을 직접 사용합니다. 이전의 `Go 1.23.2 + scaffold-only Go helper + go wrapper` 구조는 제거되었습니다.
 
-If you previously built the image before this fix, rebuild without cache:
+| 항목 | 값 |
+|---|---|
+| Project Go baseline | `1.25.12` |
+| Docker base image | `golang:1.25.12-bookworm` |
+| Cosmos SDK target | `v0.53.7` |
+| Ignite CLI | `v29.10.1` |
+
+이미 이전 이미지가 있다면 반드시 no-cache로 다시 빌드합니다.
 
 ```bash
 docker compose -f infra/docker/docker-compose.chain.yml build --no-cache chain-dev
 ```
-
-Then remove the failed temporary scaffold directory and retry:
-
-```bash
-rm -rf .tmp/stablecoin
-docker compose -f infra/docker/docker-compose.chain.yml run --rm chain-dev
-chain/scripts/scaffold-chain.sh
-```
-
-## Troubleshooting: buf requires Go 1.25.x
-
-If scaffold fails with an error similar to the following:
-
-```text
-github.com/bufbuild/buf@v1.71.0 requires go >= 1.25.10
-```
-
-use the updated image from commit containing the `go tool` wrapper fix. Ignite runs buf as `go tool github.com/bufbuild/buf/cmd/buf`; the Docker image now intercepts that specific call and pins buf to `v1.56.0`, matching Ignite `v29.10.1`'s own dependency.
-
-Rebuild without cache and retry:
-
-```bash
-git pull origin main
-rm -rf .tmp/stablecoin
-docker compose -f infra/docker/docker-compose.chain.yml build --no-cache chain-dev
-docker compose -f infra/docker/docker-compose.chain.yml run --rm chain-dev
-chain/scripts/scaffold-chain.sh
-```
-
-## Troubleshooting: scaffold requires Go 1.25.10+
-
-Ignite `v29.10.1` can resolve newer tool dependencies while running its temporary scaffold `go mod tidy` step. Recent `github.com/bufbuild/buf` releases require Go `1.25.10+`. The Docker image therefore keeps the project baseline at Go `1.23.2`, but installs scaffold-only Go `1.25.12` so Ignite can complete scaffold generation.
-
-After scaffold generation, `chain/scripts/scaffold-chain.sh` normalizes the generated chain back toward the MVP baseline: Cosmos SDK `v0.53.7`, Go `1.23.2`, and pinned buf `v1.56.0`.

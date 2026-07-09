@@ -20,7 +20,7 @@
 | 영역 | 확정 버전 | 상태 |
 |---|---|---|
 | Cosmos SDK | `v0.53.7` | MVP 개발 기준 확정 |
-| Go | `1.23.2` | Cosmos SDK `v0.53.7` go.mod 기준 |
+| Go | `1.25.12` | MVP Docker/CI/build 기준 |
 | CometBFT | `v0.38.21` | Cosmos SDK `v0.53.7` dependency 기준 |
 | Node.js | `22.x LTS` | Wallet/Scan/Admin/API 개발 기준 |
 | PostgreSQL | `16.x` | Indexer/API DB 기준 |
@@ -44,7 +44,7 @@ Cosmos SDK: v0.53.7
 |---|---|
 | 안정성 | `v0.53` 계열은 현재 production chain에서 많이 사용되는 안정 계열로 판단 |
 | 최신 패치 | `v0.53.7`은 `v0.53` 계열의 최신 패치 버전으로 확인 |
-| Go 요구사항 | `go 1.23.2` 기준으로 개발 환경 구성이 현실적 |
+| Go 요구사항 | `go 1.25.12` 기준으로 개발 환경 구성이 현실적 |
 | CometBFT 호환성 | `CometBFT v0.38.21`과 함께 사용됨 |
 | MVP 적합성 | private chain MVP에 필요한 기능 구현에 충분 |
 | 리스크 | `v0.54` 대비 급격한 최신 Go 요구사항과 breaking change 리스크가 낮음 |
@@ -59,7 +59,7 @@ Cosmos SDK: v0.53.7
 
 ```text
 Cosmos SDK: v0.53.7
-Go directive: go 1.23.2
+Go directive: go 1.25.12
 CometBFT: github.com/cometbft/cometbft v0.38.21
 cosmossdk.io/api: v0.9.2
 cosmossdk.io/core: v0.11.3
@@ -91,12 +91,12 @@ Cosmos SDK v0.54.2 go directive: go 1.25.9
 ## 5.1 확정 버전
 
 ```text
-Go: 1.23.2
+Go: 1.25.12
 ```
 
 ## 5.2 정책
 
-- `chain/` 구현은 Go `1.23.2`를 기준으로 한다.
+- `chain/` 구현, Docker 개발환경, CI/release build는 Go `1.25.12`를 기준으로 한다.
 - 개발자 로컬, CI, Docker build image는 동일한 Go 버전을 사용한다.
 - 추후 Cosmos SDK 업그레이드 시 Go 버전도 함께 재검토한다.
 
@@ -106,7 +106,7 @@ Go: 1.23.2
 
 | 방식 | 설명 | 추천 |
 |---|---|---:|
-| Docker 기반 | Go 1.23.2 build image 사용 | 높음 |
+| Docker 기반 | Go 1.25.12 build image 사용 | 높음 |
 | asdf | `.tool-versions` 기준 설치 | 높음 |
 | mise | `mise.toml` 기준 설치 | 중간 |
 | 시스템 설치 | OS package 또는 공식 tarball | 중간 |
@@ -153,7 +153,7 @@ Phase 1 개발은 다음 버전을 기준으로 시작한다.
 
 ```text
 Cosmos SDK: v0.53.7
-Go: 1.23.2
+Go: 1.25.12
 CometBFT: v0.38.21
 Node.js: 22.x LTS
 PostgreSQL: 16.x
@@ -193,7 +193,7 @@ MVP 개발 착수 기준 기술 스택은 다음으로 확정한다.
 
 ```text
 Cosmos SDK v0.53.7
-Go 1.23.2
+Go 1.25.12
 CometBFT v0.38.21
 Node.js 22.x LTS
 PostgreSQL 16.x

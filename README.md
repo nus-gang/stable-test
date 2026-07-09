@@ -36,7 +36,7 @@ MVP 목표는 다음 end-to-end 흐름을 구현하는 것입니다.
 | Component | Version |
 |---|---|
 | Cosmos SDK | `v0.53.7` |
-| Go | `1.23.2` |
+| Go | `1.25.12` |
 | CometBFT | `v0.38.21` |
 | Node.js | `22.x LTS` |
 | PostgreSQL | `16.x` |
@@ -104,10 +104,7 @@ docker compose -f infra/docker/docker-compose.dev.yml up -d
 
 See [`docs/09_Mac_Docker_Development_Setup_v1.md`](docs/09_Mac_Docker_Development_Setup_v1.md) for the full setup guide.
 
-### Ignite buf tool pin
 
-The chain dev image pins Ignite's internal `go tool github.com/bufbuild/buf/cmd/buf` execution to `buf v1.56.0` to avoid latest `buf` requiring an unreleased Go toolchain during scaffold.
+### Go 1.25.12 baseline
 
-### Ignite scaffold helper Go version
-
-The Docker image keeps the project baseline at Go `1.23.2`, but installs scaffold-only Go `1.25.12` because Ignite's temporary scaffold dependency resolution can require Go `1.25.10+`.
+The chain development Docker image uses `golang:1.25.12-bookworm` as the single project development/build baseline. Previous scaffold-only Go helper and Go wrapper logic has been removed.
