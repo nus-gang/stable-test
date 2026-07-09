@@ -1,3 +1,5 @@
+# stable-test
+
 # Stable Test — Private Cosmos Stablecoin Platform
 
 Private Cosmos SDK 기반 permissioned stablecoin platform 프로젝트입니다.
