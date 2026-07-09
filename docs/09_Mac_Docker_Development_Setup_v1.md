@@ -215,3 +215,28 @@ Docker 기반 개발환경 다음 작업은 다음 순서로 진행한다.
 | 4 | 4-validator devnet genesis/gentx 자동화 |
 | 5 | `x/authority` module scaffold |
 | 6 | `x/stablecoin` module scaffold |
+
+## Cosmos SDK Scaffold 생성
+
+Docker 이미지 빌드 후 `chain-dev` 컨테이너 안에서 아래 명령을 실행합니다.
+
+```bash
+chain/scripts/scaffold-chain.sh
+```
+
+이 스크립트는 Ignite CLI를 사용해 임시 디렉터리에 Cosmos SDK app scaffold를 생성한 뒤 `chain/`으로 병합합니다. 기본값은 다음과 같습니다.
+
+| 항목 | 값 |
+|---|---|
+| Chain name | `stablecoin` |
+| Binary | `stablecoind` |
+| Chain ID | `stablecoin-private-1` |
+| Address prefix | `stbc` |
+| Default denom | `uusdx` |
+| Cosmos SDK | `v0.53.7` |
+
+생성 후 빌드합니다.
+
+```bash
+chain/scripts/build.sh
+```

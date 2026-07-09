@@ -2,6 +2,7 @@
 FROM golang:1.23.2-bookworm
 
 ARG DEBIAN_FRONTEND=noninteractive
+ARG IGNITE_VERSION=29.10.1
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -16,9 +17,24 @@ RUN apt-get update \
         libc6-dev \
         pkg-config \
         protobuf-compiler \
+        rsync \
+        tar \
         unzip \
         vim \
     && rm -rf /var/lib/apt/lists/*
+
+RUN set -eux; \
+    arch="$(dpkg --print-architecture)"; \
+    case "$arch" in \
+      amd64) ignite_arch="amd64" ;; \
+      arm64) ignite_arch="arm64" ;; \
+      *) echo "Unsupported architecture for Ignite CLI: $arch" >&2; exit 1 ;; \
+    esac; \
+    curl -fsSL "https://github.com/ignite/cli/releases/download/v${IGNITE_VERSION}/ignite_${IGNITE_VERSION}_linux_${ignite_arch}.tar.gz" -o /tmp/ignite.tar.gz; \
+    tar -xzf /tmp/ignite.tar.gz -C /tmp; \
+    install -m 0755 /tmp/ignite /usr/local/bin/ignite; \
+    rm -f /tmp/ignite.tar.gz /tmp/ignite; \
+    ignite version
 
 ENV CGO_ENABLED=1
 ENV GOPATH=/go
@@ -26,6 +42,7 @@ ENV PATH="/go/bin:${PATH}"
 ENV CHAIN_ID=stablecoin-private-1
 ENV CHAIN_HOME=/workspace/.chain-data
 ENV CHAIN_BINARY=stablecoind
+ENV IGNITE_VERSION=${IGNITE_VERSION}
 
 WORKDIR /workspace
 

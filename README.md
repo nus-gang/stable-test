@@ -56,6 +56,21 @@ MVP 목표는 다음 end-to-end 흐름을 구현하는 것입니다.
 | Compliance Mode | `BLACKLIST_ONLY` |
 | Fee Denom | `uusdx` |
 
+
+### Generate the Cosmos SDK chain scaffold
+
+After entering the `chain-dev` container, generate the initial Cosmos SDK application scaffold:
+
+```bash
+chain/scripts/scaffold-chain.sh
+```
+
+The script uses Ignite CLI inside Docker, targets Cosmos SDK `v0.53.7`, address prefix `stbc`, default denom `uusdx`, and merges the generated app into `chain/`.
+
+```bash
+chain/scripts/build.sh
+```
+
 ## Documentation
 
 Start with:
