@@ -296,3 +296,12 @@ Proto/OpenAPI generation is enabled by default. Configure Docker Desktop resourc
 | Disk image size | 64GB | 100GB+ |
 
 If OpenAPI generation is killed by the OS, retry after increasing Docker memory or run `SKIP_PROTO=1 chain/scripts/scaffold-chain.sh` as a fallback.
+
+
+### Local chain minimum gas price
+
+`chain/scripts/start-single-node.sh` automatically sets `minimum-gas-prices` in `app.toml`. The local default is `0uusdx`. Override it when needed:
+
+```bash
+MIN_GAS_PRICES=0.001uusdx chain/scripts/start-single-node.sh
+```

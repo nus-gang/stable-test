@@ -15,6 +15,7 @@ DENOM="${DENOM:-uusdx}"
 GENESIS_ACCOUNT_AMOUNT="${GENESIS_ACCOUNT_AMOUNT:-100000000000${DENOM}}"
 GENTX_STAKE_AMOUNT="${GENTX_STAKE_AMOUNT:-100000000${DENOM}}"
 RESET_HOME="${RESET_HOME:-0}"
+MIN_GAS_PRICES="${MIN_GAS_PRICES:-0${DENOM}}"
 
 export PATH="$(go env GOPATH 2>/dev/null || echo /go)/bin:$PATH"
 
@@ -52,6 +53,21 @@ run_genesis_cmd() {
   else
     "$CHAIN_BINARY" "$@"
   fi
+}
+
+configure_app_toml() {
+  local app_toml="$CHAIN_HOME/config/app.toml"
+  if [ ! -f "$app_toml" ]; then
+    return 0
+  fi
+
+  echo "Configuring minimum-gas-prices=$MIN_GAS_PRICES in $app_toml"
+  if grep -q '^minimum-gas-prices *= *' "$app_toml"; then
+    sed -i.bak "s/^minimum-gas-prices *= *.*/minimum-gas-prices = \"$MIN_GAS_PRICES\"/" "$app_toml"
+  else
+    printf '\nminimum-gas-prices = "%s"\n' "$MIN_GAS_PRICES" >> "$app_toml"
+  fi
+  rm -f "$app_toml.bak"
 }
 
 install_binary_if_needed
@@ -95,6 +111,8 @@ else
   echo "Existing genesis found at $CHAIN_HOME/config/genesis.json"
 fi
 
+configure_app_toml
+
 cat <<INFO
 
 Starting single-node chain
@@ -102,6 +120,7 @@ Starting single-node chain
   CHAIN_HOME=$CHAIN_HOME
   MONIKER=$MONIKER
   DENOM=$DENOM
+  MIN_GAS_PRICES=$MIN_GAS_PRICES
 
 Stop with Ctrl+C.
 INFO
